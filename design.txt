@@ -1,0 +1,106 @@
+quiz game
+
+The program must have:
+    Option to create quiz
+    Option to play through quiz
+        Track player score when playing
+    Quizzes must be at least 5 questions long
+    Created quizzes must be saved somehow so they persist through closing the program.
+        able to delete created quizzes from the app
+    Answers must be multiple choice
+
+Any language
+GUI or CLI
+
+Once you have completed your project, you can submit it to ⁠week-1-quiz-game. Please refrain from copying other people's work (we will check for this).
+
+And with that, best of luck and happy coding
+
+
+Main menu:
+
+1. Play quiz game
+    1. Show list of quizzes (when quiz is loaded randomize the questions order and the choices of each questions order.)
+    0. Back
+
+2. Manage quiz
+    1. New
+    2. Edit
+    3. Delete
+    0. back
+
+3. Exit
+
+New Quiz:
+  req:
+    Minimum 5 questions, atleast 2 multiple choices
+    Title / Name
+
+    Enter name of quiz:
+
+
+    //repeat >= 5:
+    New Question:
+        Enter question one:
+            enter choice one:
+            enter choice two:
+            enter choice three:
+            enter choice four:
+
+
+  ... continue to 5 questions then start asking if they want to do another question (y/n)
+
+Edit Quiz:
+    *show list of quizes
+        *add back as the last option with number 0
+
+    Which quiz do you want to edit?:
+    *user choose quiz via corresponding number
+
+    which detail do you want to edit?:
+        1. edit name
+            Enter new quiz name:
+            *user enter new name
+
+        2. Edit question
+            *list questions
+                *add back as the last option with number 0
+
+            Which question do you want to edit?:
+            *user select question via corresponding number
+
+            <Quiz Name>
+            What would you like to change?:
+            1. Reword question
+                Enter modified question:
+                *user enter new question
+                *go back one menu (What would you like to change)
+
+            2. Reword answers
+                *list answers for this question
+                    *add back as the last option with number 0
+
+                Which answer do you want to change?:
+                *user enter corresponding number
+
+                Enter modified answer:
+                *user enter new answer
+                *go back one menu (What would you like to change)
+
+        3. Back
+
+Delete Quiz:
+    *list quizes
+        *add back as the last option with number 0
+
+    Which quiz do you want to delete?:
+    *user enter corresponding number
+
+    Are you sure you want to delete {quiz_name} This cant be undone (y/n):
+    *user confirm or deny
+
+    {quiz_name} {was/was not} deleted.
+    *go back one menu
+
+
+
