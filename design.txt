@@ -1,7 +1,7 @@
 quiz game
 
 The program must have:
-    Option to create quiz
+    Option to create quiz --
     Option to play through quiz
         Track player score when playing
     Quizzes must be at least 5 questions long
@@ -19,17 +19,32 @@ And with that, best of luck and happy coding
 
 Main menu:
 
-1. Play quiz game
-    1. Show list of quizzes (when quiz is loaded randomize the questions order and the choices of each questions order.)
-    0. Back
+    1. Play
+        1. Continue (show only if active game exists)
+            load active game and continue running it.
+        2. New Game
+            *Show list of quizzes (when quiz is loaded randomize the questions order and the choices of each questions order.)
+                *add back as last option for 0
 
-2. Manage quiz
-    1. New
-    2. Edit
-    3. Delete
-    0. back
+            Which quiz do you want to do?
+            *user enter corresponding number
 
-3. Exit
+            randomize order of questions and randomize each questions answers (choices)
+
+            loop through the questions
+                ask the question
+                get the choice
+                keep track of correct questions
+
+            show score x/y questions
+
+    2. Manage quiz
+        1. New
+        2. Edit
+        3. Delete
+        0. back
+
+    3. Exit
 
 New Quiz:
   req:
@@ -103,4 +118,40 @@ Delete Quiz:
     *go back one menu
 
 
+persistent quizes:
+    serialize quiz objects to their own directory called quizes
+    eg: "<app_home>/quizes/<quiz_name>.quiz"
+
+
+######################
+      Classes:
+######################
+
+QuizGame:
+    quizes: Quiz[]
+    createQuiz(name:String, question:String, answers:String[]): Quiz
+    deleteQuiz(index:int): void
+    saveQuizes(Quiz[]): void
+    loadQuizes(): List<Quiz>
+    updateQuiz(index:int, quiz:Quiz)
+
+Quiz:
+    name: String
+    questions: Question[]
+
+    play(): void - randomize a local copy of the questions
+    print(): void
+
+Question:
+    question: String
+    correctAnswer: String
+    falseAnswers: String[]
+
+    getRandomizedAnswers(): String[]
+    get(): String
+    print(): void
+
+Menu:
+    header: String
+    choices: String[]
 
