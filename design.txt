@@ -56,7 +56,7 @@ New Quiz:
 
 
     //repeat >= 5:
-    New Question:
+    New codejam.quizgame.Question:
         Enter question one:
             enter choice one:
             enter choice two:
@@ -130,7 +130,7 @@ persistent quizes:
 
 QuizGame:
     quizes: Quiz[]
-    createQuiz(name:String, questions:Question[]): Quiz
+    createQuiz(name:String, questions:codejam.quizgame.Question[]): Quiz
     deleteQuiz(index:int): void
     saveQuizes(Quiz[]): void
     loadQuizes(): List<Quiz>
@@ -138,12 +138,12 @@ QuizGame:
 
 Quiz:
     name: String
-    questions: Question[]
+    questions: codejam.quizgame.Question[]
 
     play(): void - randomize a local copy of the questions
     print(): void
 
-Question:
+codejam.quizgame.Question:
     question: String
     correctAnswer: String
     falseAnswers: String[]
