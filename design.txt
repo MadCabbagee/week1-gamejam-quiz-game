@@ -5,6 +5,7 @@ The program must have:
     Option to play through quiz
         Track player score when playing
     Quizzes must be at least 5 questions long
+        Once 5 questions have been entered prompt user for how many more questions they want. Their input will determine the new array size.
     Created quizzes must be saved somehow so they persist through closing the program.
         able to delete created quizzes from the app
     Answers must be multiple choice
@@ -129,11 +130,11 @@ persistent quizes:
 
 QuizGame:
     quizes: Quiz[]
-    createQuiz(name:String, question:String, answers:String[]): Quiz
+    createQuiz(name:String, questions:Question[]): Quiz
     deleteQuiz(index:int): void
     saveQuizes(Quiz[]): void
     loadQuizes(): List<Quiz>
-    updateQuiz(index:int, quiz:Quiz)
+    updateQuiz(index:int, quiz:Quiz): void   // Might have to be changed
 
 Quiz:
     name: String
