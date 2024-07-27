@@ -11,29 +11,32 @@ public class QuizMaker {
     private final Menu mainMenu;
     private final Menu playMenu;
     private final Menu quizMenu;
+    private final QuizManager qMan;
 
     public QuizMaker() {
-        QuizManager qMan = new QuizManager();
+        qMan = new QuizManager();
+        final Runnable returnToMainMenu = () -> {/* will return to main loop which will prompt with main menu again */};
 
         String[] mainChoices = new String[] {"Play", "Manage Quizes", "Exit"};
         Runnable[] mainActions = new Runnable[] {this::showPlayMenu, this::showQuizMenu, () -> run = false};
         mainMenu = new Menu(mainChoices, mainActions);
 
         String[] playChoices = new String[] {"New", "Continue", "Go Back"};
-        Runnable[] playActions = new Runnable[] {() -> {
-            // show list of quizes
-            qMan.printQuizes();
-                // if quizes list empty tell them to add some quizes first
-                // ask them to choose quiz
-                // play the quiz
-
-
-        }};
+        Runnable[] playActions = {this::playNewQuiz, this::continueActiveQuiz, returnToMainMenu };
         playMenu = new Menu(playChoices, playActions);
 
         String[] quizChoices = new String[] {"New", "Edit", "Delete", "Go Back"};
-        Runnable[] quizActions = new Runnable[] {};
+        Runnable[] quizActions = new Runnable[] {qMan::createQuiz, qMan::editQuiz, qMan::deleteQuiz, returnToMainMenu};
         quizMenu = new Menu(quizChoices, quizActions);
+    }
+
+    private void continueActiveQuiz() {
+        // check active exists. if not tell them
+        // else continue active quiz loaded from file (serialized java object)
+    }
+
+    private void playNewQuiz() {
+
     }
 
     private void showPlayMenu() {
