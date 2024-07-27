@@ -19,6 +19,18 @@ public class Question {
     String correctAnswer;
     String[] falseAnswers;
 
+    public String getQuestion() {
+        return question;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public String[] getFalseAnswers() {
+        return falseAnswers;
+    }
+
     public String[] getRandomizedAnswers(String[] falseAnswers) {
         String[] shuffledAnswers = new String[falseAnswers.length];
         boolean[] falseAnswersB = new boolean[falseAnswers.length];
