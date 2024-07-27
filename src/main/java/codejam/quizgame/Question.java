@@ -48,4 +48,13 @@ public class Question {
         }
         return shuffledAnswers;
     }
+
+    void print() {
+        System.out.println(this.getQuestion());
+        System.out.println(this.getCorrectAnswer());
+
+        for (String falseAnswer : falseAnswers) {
+            System.out.println(falseAnswer);
+        }
+    }
 }
