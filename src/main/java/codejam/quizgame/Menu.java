@@ -24,7 +24,9 @@ public class Menu {
         System.out.print("Enter your choice: ");
         while (!consoleIn.hasNextInt()) {
             System.out.println("Invalid input. Please enter a number.");
-            consoleIn.next();
+            if (consoleIn.hasNext()) {
+                consoleIn.next(); // i think this is here to flush extra stuff in the scanner, donno will see if its even needed
+            }
         }
         int choice = consoleIn.nextInt();
         if (choice > 0 && choice < choices.length) {
@@ -33,6 +35,7 @@ public class Menu {
         } else {
             System.out.println("Invalid selection. Please enter one of the numbers from the menu.");
         }
+        consoleIn.close();
     }
 
     private void display() {
