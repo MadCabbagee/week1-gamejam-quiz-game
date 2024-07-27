@@ -2,6 +2,8 @@ package codejam.quizgame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
+import java.util.UUID;
 
 public class Question {
 
@@ -15,26 +17,23 @@ public class Question {
 
     String question;
     String correctAnswer;
-    String[] falseAnswer;
+    String[] falseAnswers;
 
-    // Use arrays and one of them should be boolean for 1-to-1 mapping for which ones have already been used
-    public void getRandomizedAnswers() {
-        String[] falseAnswer = {"one", "two", "three", "four"};
-        ArrayList<String> al = new ArrayList<>(Arrays.asList(falseAnswer));
+    public String[] getRandomizedAnswers(String[] falseAnswers) {
+        String[] shuffledAnswers = new String[falseAnswers.length];
+        boolean[] falseAnswersB = new boolean[falseAnswers.length];
 
-        for (int i = 0; i < falseAnswer.length; i++) {
-            int randomIndex = (int) (Math.random() * al.size());
-            falseAnswer[i] = al.get(randomIndex);
-            al.remove(randomIndex);
+        Random rng = new Random(UUID.randomUUID().hashCode());
+        for (int i = 0; i < falseAnswers.length; i++) {
+            int j = rng.nextInt(shuffledAnswers.length);
+            if (!falseAnswersB[i] && shuffledAnswers[j] == null) {
+                shuffledAnswers[j] = falseAnswers[i];
+                falseAnswersB[i] = true;
+            }
+            else {
+                i--;
+            }
         }
-
-        for (String word : falseAnswer) {
-            System.out.print(word + " ");
-        }
-    }
-
-    public static void main(String[] args) {
-
-         new Question().getRandomizedAnswers();
+        return shuffledAnswers;
     }
 }
