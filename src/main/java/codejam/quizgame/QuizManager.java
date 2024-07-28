@@ -41,18 +41,64 @@ public class QuizManager {
             questions[createdQuestions++] = new Question(questionContent, correctAnswer, falseAnswers);
         }
         quizes.add(new Quiz(quizName, questions));
+        saveQuizes();
     }
 
     public void editQuiz() {
         int quizChoice = Console.promptWithChoicesSpaced("Choose a quiz to edit:", getQuizNames()) - 1;
-        Quiz q = quizes.get(quizChoice);
+        Quiz quiz = quizes.get(quizChoice);
 
-        String[] editChoices = {"Rename Quiz", "Reword Question", "Reword Answers"};
+        boolean keepEditing = true;
+        while (keepEditing) {
+            String[] editChoices = {"Rename Quiz", "Reword Question", "Reword Answers", "Cancel"};
+            int editChoice = Console.promptWithChoicesSpaced("What do you want to edit about the quiz:", editChoices);
 
+            switch (editChoice) {
+                case 1:
+                    String newName = Console.promptSpaced("Enter new quiz name:");
+                    quiz.setName(newName);
+                    saveQuizes();
+                    break;
+                case 2:
+                    int questionChoice = Console.promptWithChoicesSpaced("Which question do you want to reword:", quiz.getRawQuestions()) - 1;
+                    Question question = quiz.getQuestion(questionChoice);
+                    question.setContent(Console.promptSpaced("Enter new question:"));
+                    saveQuizes();
+                    break;
+                case 3:
+                    questionChoice = Console.promptWithChoicesSpaced("Which question is the answer you want to change in:", quiz.getRawQuestions()) - 1;
+                    Question chosenQuestion = quiz.getQuestions()[questionChoice];
+                    int answerChoice = Console.promptWithChoicesSpaced("Which answer do you want to reword:", chosenQuestion.getAnswers());
+                    switch (answerChoice) {
+                        case 1:
+                            String correctAnswer = Console.promptSpaced("Enter reworded correct answer: ");
+                            chosenQuestion.setCorrectAnswer(correctAnswer);
+                            break;
+                        case 2:
+                            String falseOne = Console.promptSpaced("Enter reworded false answer #1:");
+                            chosenQuestion.setFalseAnswer(0, falseOne);
+                            break;
+                        case 3:
+                            String falseTwo = Console.promptSpaced("Enter reworded false answer #2:");
+                            chosenQuestion.setFalseAnswer(1, falseTwo);
+                            break;
+                        case 4:
+                            String falseThree = Console.promptSpaced("Enter reworded false answer #3:");
+                            chosenQuestion.setFalseAnswer(2, falseThree);
+                            break;
+                    }
+                    saveQuizes();
+                    break;
+                case 4:
+                    keepEditing = false;
+                    break;
+            }
+        }
     }
 
     public void deleteQuiz() {
 
+        saveQuizes();
     }
 
     public void playQuiz() {
