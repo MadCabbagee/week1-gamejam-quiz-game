@@ -1,7 +1,10 @@
 package codejam.quizgame;
 
+import java.io.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class QuizManager {
     private final List<Quiz> quizes;
@@ -119,7 +122,7 @@ public class QuizManager {
             }
         }
 
-        quizes.get(choice-1).play();
+        quizes.get(choice - 1).play();
         // quiz start running
         // show score at end or keep running score (correctQ/totalQ)
     }
@@ -140,7 +143,7 @@ public class QuizManager {
         sb.append("All Quizes:\n");
         for (int i = 0; i < quizes.size(); i++) {
             Quiz q = quizes.get(i);
-            sb.append(String.format("\t%d. %s\n", i+1, q.getName()));
+            sb.append(String.format("\t%d. %s\n", i + 1, q.getName()));
         }
         System.out.println(sb);
     }
@@ -150,6 +153,32 @@ public class QuizManager {
     }
 
     public void saveQuizes() {
+        System.out.println(Path.of("./"));
         // save created quizes from memory to file
+        // create directory for quizzes if it doesn't exist
+        // loop through quizzes and save them to their own files in the directory
+
+        //
+        try {
+            File quizDir = new File("./quizzes/");
+            if (quizDir.exists()) {
+                File[] f = quizDir.listFiles();
+                for (File file : f) {
+                    file.delete();
+                }
+            } else {
+                quizDir.mkdirs();
+            }
+            for (int i = 0; i < quizes.size(); i++) {
+                FileOutputStream fout = new FileOutputStream(quizDir.toPath().resolve(UUID.randomUUID() + ".quiz").toString());
+                ObjectOutputStream out = new ObjectOutputStream(fout);
+                out.writeObject(quizes.get(i));
+            }
+
+        } catch (FileNotFoundException | SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

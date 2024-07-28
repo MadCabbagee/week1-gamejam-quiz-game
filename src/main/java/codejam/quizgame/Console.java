@@ -35,6 +35,7 @@ public class Console {
         while (selection < 1 || selection > choices.length) {
             System.out.println(prompt);
             for (int i = 0; i < choices.length; i++) {
+                // TODO convert to use StringBuilder
                 System.out.println("\t" + (i + 1) + ". " + choices[i]);
             }
 

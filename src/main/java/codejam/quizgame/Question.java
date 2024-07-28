@@ -1,10 +1,11 @@
 package codejam.quizgame;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 
-public class Question {
+public class Question implements Serializable {
 
 //    question: String
 //    correctAnswer: String

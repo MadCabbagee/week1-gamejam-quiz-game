@@ -1,9 +1,11 @@
 package codejam.quizgame;
 
+import java.io.Serializable;
 import java.util.Random;
 import java.util.UUID;
+import java.io.*;
 
-public class Quiz {
+public class Quiz implements Serializable {
 
 //    Quiz:
 //    name: String
