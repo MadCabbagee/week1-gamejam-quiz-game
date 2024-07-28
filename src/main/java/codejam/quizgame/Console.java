@@ -35,7 +35,7 @@ public class Console {
         while (selection < 1 || selection > choices.length) {
             System.out.println(prompt);
             for (int i = 0; i < choices.length; i++) {
-                System.out.println("\t" + (i+1) + ". " + choices[i]);
+                System.out.println("\t" + (i + 1) + ". " + choices[i]);
             }
 
             try {
@@ -66,4 +66,16 @@ public class Console {
     }
 
 
+    public static int promptForIntSpaced(String prompt) {
+        int val = -1;
+        while (val == -1) {
+            try {
+                val = Integer.parseInt(promptSpaced(prompt));
+
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter an integer.");
+            }
+        }
+        return val;
+    }
 }
