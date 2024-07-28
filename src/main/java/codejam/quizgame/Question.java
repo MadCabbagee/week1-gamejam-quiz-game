@@ -1,5 +1,6 @@
 package codejam.quizgame;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 
@@ -72,7 +73,7 @@ public class Question {
 
         int choice = Console.promptWithChoicesSpaced(content, choices);
 
-        if (choices[choice].equals(correctAnswer)) {
+        if (choices[choice-1].equals(correctAnswer)) {
             System.out.println("Good work! That was correct!");
             return true;
         } else {
