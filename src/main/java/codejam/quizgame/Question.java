@@ -14,8 +14,8 @@ public class Question {
 //    get(): String
 //    print(): void
 
-    private final String content;
-    private final String correctAnswer;
+    private String content;
+    private String correctAnswer;
     private final String[] falseAnswers;
 
     public Question(String content, String correctAnswer, String[] falseAnswers) {
@@ -25,11 +25,7 @@ public class Question {
     }
 
     public String[] getRandomizedAnswers() {
-        String[] choices = new String[4];
-        choices[0] = correctAnswer;
-        choices[1] = falseAnswers[0];
-        choices[2] = falseAnswers[1];
-        choices[3] = falseAnswers[2];
+        String[] choices = getAnswers();
         String[] shuffledAnswers = new String[4];
         boolean[] falseAnswersB = new boolean[4];
 
@@ -80,5 +76,26 @@ public class Question {
             System.out.println("Im sorry, that was not the correct answer.");
             return false;
         }
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String[] getAnswers() {
+        String[] answers = new String[4];
+        answers[0] = correctAnswer;
+        answers[1] = falseAnswers[0];
+        answers[2] = falseAnswers[1];
+        answers[3] = falseAnswers[2];
+        return answers;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
+    public void setFalseAnswer(int i, String falseAnswer) {
+        falseAnswers[i] = falseAnswer;
     }
 }
