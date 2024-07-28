@@ -4,20 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuizManager {
-    private List<Quiz> quizes;
+    private final List<Quiz> quizes;
 
     public QuizManager() {
         quizes = new ArrayList<>();
-        /*this.quizes = new Quiz[2];
-        quizes[0] = new Quiz("test1", new Question[5]);
-        quizes[1] = new Quiz("test2", new Question[5]);*/
     }
 
     public void createQuiz() {
         // ask user stuff for creating quiz then create it and add to list
         String quizName = Console.promptSpaced("Enter new quiz name:");
-        // todo ensure they enter at least 5 questions
-        int quizQuestionCount = Integer.parseInt(Console.promptSpaced("How many questions will your quiz have?"));
+
+        int quizQuestionCount;
+        do {
+            quizQuestionCount = Console.promptForIntSpaced("How many questions will your quiz have?(5-10)");
+            if (quizQuestionCount < 5 || quizQuestionCount > 10) {
+                System.out.println("You must specify a number between 5 and 10 inclusive.");
+                quizQuestionCount = 0;
+            }
+        }
+        while (quizQuestionCount == 0);
+
         Question[] questions = new Question[quizQuestionCount];
         int createdQuestions = 0;
 
@@ -37,12 +43,12 @@ public class QuizManager {
         quizes.add(new Quiz(quizName, questions));
     }
 
-    private boolean isValid(char answer) {
-        return answer == 'y' || answer == 'n';
-    }
-
     public void editQuiz() {
-        // ask suer stuff for editing quiz then edit it
+        int quizChoice = Console.promptWithChoicesSpaced("Choose a quiz to edit:", getQuizNames()) - 1;
+        Quiz q = quizes.get(quizChoice);
+
+        String[] editChoices = {"Rename Quiz", "Reword Question", "Reword Answers"};
+
     }
 
     public void deleteQuiz() {
@@ -50,7 +56,7 @@ public class QuizManager {
     }
 
     public void playQuiz() {
-        if (quizes == null) {
+        if (quizes.isEmpty()) {
             System.out.println("You must create a quiz first.");
             return;
         }
@@ -80,11 +86,6 @@ public class QuizManager {
         }
 
         return quizNames;
-    }
-
-    public void continueActiveQuiz() {
-        // check active exists. if not tell them
-        // else continue active quiz loaded from file (serialized java object)
     }
 
     public void printQuizes() {
