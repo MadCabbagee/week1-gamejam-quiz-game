@@ -1,9 +1,13 @@
 package codejam.quizgame;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class QuizManager {
-    private Quiz[] quizes;
+    private List<Quiz> quizes;
 
     public QuizManager() {
+        quizes = new ArrayList<>();
         /*this.quizes = new Quiz[2];
         quizes[0] = new Quiz("test1", new Question[5]);
         quizes[1] = new Quiz("test2", new Question[5]);*/
@@ -12,6 +16,7 @@ public class QuizManager {
     public void createQuiz() {
         // ask user stuff for creating quiz then create it and add to list
         String quizName = Console.promptSpaced("Enter new quiz name:");
+        // todo ensure they enter at least 5 questions
         int quizQuestionCount = Integer.parseInt(Console.promptSpaced("How many questions will your quiz have?"));
         Question[] questions = new Question[quizQuestionCount];
         int createdQuestions = 0;
@@ -29,6 +34,7 @@ public class QuizManager {
 
             questions[createdQuestions++] = new Question(questionContent, correctAnswer, falseAnswers);
         }
+        quizes.add(new Quiz(quizName, questions));
     }
 
     private boolean isValid(char answer) {
@@ -61,16 +67,16 @@ public class QuizManager {
             }
         }
 
-        quizes[choice-1].play();
+        quizes.get(choice-1).play();
         // quiz start running
         // show score at end or keep running score (correctQ/totalQ)
     }
 
     private String[] getQuizNames() {
-        String[] quizNames = new String[quizes.length];
+        String[] quizNames = new String[quizes.size()];
 
         for (int i = 0; i < quizNames.length; i++) {
-            quizNames[i] = quizes[i].getName();
+            quizNames[i] = quizes.get(i).getName();
         }
 
         return quizNames;
@@ -85,8 +91,8 @@ public class QuizManager {
         // print all quizes names from the list
         StringBuilder sb = new StringBuilder();
         sb.append("All Quizes:\n");
-        for (int i = 0; i < quizes.length; i++) {
-            Quiz q = quizes[i];
+        for (int i = 0; i < quizes.size(); i++) {
+            Quiz q = quizes.get(i);
             sb.append(String.format("\t%d. %s\n", i+1, q.getName()));
         }
         System.out.println(sb);
