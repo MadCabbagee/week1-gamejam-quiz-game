@@ -51,7 +51,7 @@ public class Console {
         return selection;
     }
 
-    public static int promptWithChoicesSpaced(String prompt, String[] choices) {
+    public static int promptWithChoicesSpaced(String prompt, String... choices) {
         int choice = promptWithChoices(prompt, choices);
         System.out.println();
         return choice;
