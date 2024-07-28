@@ -58,4 +58,20 @@ public class Quiz {
     public Question[] getQuestions() {
         return questions;
     }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public String[] getRawQuestions() {
+        String[] rawQuestions = new String[questions.length];
+        for (int i = 0; i < rawQuestions.length; i++) {
+            rawQuestions[i] = questions[i].getContent();
+        }
+        return rawQuestions;
+    }
+
+    public Question getQuestion(int index) {
+        return questions[index];
+    }
 }
