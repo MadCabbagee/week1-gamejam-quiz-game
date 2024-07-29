@@ -3,14 +3,16 @@ package codejam.quizgame;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class QuizManager {
-    private final List<Quiz> quizes;
+    private final List<Quiz> quizzes;
 
     public QuizManager() {
-        quizes = new ArrayList<>();
+        quizzes = new ArrayList<>();
+        loadQuizes();
     }
 
     public void createQuiz() {
@@ -43,13 +45,15 @@ public class QuizManager {
 
             questions[createdQuestions++] = new Question(questionContent, correctAnswer, falseAnswers);
         }
-        quizes.add(new Quiz(quizName, questions));
+        quizzes.add(new Quiz(quizName, questions));
         saveQuizes();
     }
 
     public void editQuiz() {
-        int quizChoice = Console.promptWithChoicesSpaced("Choose a quiz to edit:", getQuizNames()) - 1;
-        Quiz quiz = quizes.get(quizChoice);
+        String[] options = addOption(getQuizNames(), "Go Back");
+        int quizChoice = Console.promptWithChoicesSpaced("Choose a quiz to edit:", options) - 1;
+        if (quizChoice == options.length-1) return;
+        Quiz quiz = quizzes.get(quizChoice);
 
         boolean keepEditing = true;
         while (keepEditing) {
@@ -60,13 +64,11 @@ public class QuizManager {
                 case 1:
                     String newName = Console.promptSpaced("Enter new quiz name:");
                     quiz.setName(newName);
-                    saveQuizes();
                     break;
                 case 2:
                     int questionChoice = Console.promptWithChoicesSpaced("Which question do you want to reword:", quiz.getRawQuestions()) - 1;
                     Question question = quiz.getQuestion(questionChoice);
                     question.setContent(Console.promptSpaced("Enter new question:"));
-                    saveQuizes();
                     break;
                 case 3:
                     questionChoice = Console.promptWithChoicesSpaced("Which question is the answer you want to change in:", quiz.getRawQuestions()) - 1;
@@ -90,22 +92,28 @@ public class QuizManager {
                             chosenQuestion.setFalseAnswer(2, falseThree);
                             break;
                     }
-                    saveQuizes();
+
                     break;
                 case 4:
                     keepEditing = false;
                     break;
             }
+            saveQuizes();
         }
     }
 
     public void deleteQuiz() {
-
+        String[] qNames = getQuizNames();
+        String[] options = addOption(qNames, "Go Back");
+        int choice = Console.promptWithChoicesSpaced("Choose a quiz to delete:", options);
+        if (choice == options.length) return;
+        quizzes.remove(choice-1);
+        System.out.println("The quiz was deleted.\n");
         saveQuizes();
     }
 
     public void playQuiz() {
-        if (quizes.isEmpty()) {
+        if (quizzes.isEmpty()) {
             System.out.println("You must create a quiz first.");
             return;
         }
@@ -115,23 +123,32 @@ public class QuizManager {
         // user select quiz
         int choice = -1;
         while (choice == -1) {
+            String[] options = addOption(quizNames, "Go Back");
+
             try {
-                choice = Console.promptWithChoicesSpaced("Select a quiz to play.", quizNames);
+                choice = Console.promptWithChoicesSpaced("Select a quiz to play.", options);
+                if (choice == options.length) {
+                    return;
+                }
             } catch (Exception e) {
                 System.out.println("Please enter a valid selection.");
             }
         }
 
-        quizes.get(choice - 1).play();
-        // quiz start running
-        // show score at end or keep running score (correctQ/totalQ)
+        quizzes.get(choice - 1).play();
+    }
+
+    private String[] addOption(String[] quizNames, String extraOption) {
+        var a = Arrays.copyOf(quizNames, quizNames.length + 1);
+        a[a.length -1] = "Go Back";
+        return a;
     }
 
     private String[] getQuizNames() {
-        String[] quizNames = new String[quizes.size()];
+        String[] quizNames = new String[quizzes.size()];
 
         for (int i = 0; i < quizNames.length; i++) {
-            quizNames[i] = quizes.get(i).getName();
+            quizNames[i] = quizzes.get(i).getName();
         }
 
         return quizNames;
@@ -141,8 +158,8 @@ public class QuizManager {
         // print all quizes names from the list
         StringBuilder sb = new StringBuilder();
         sb.append("All Quizes:\n");
-        for (int i = 0; i < quizes.size(); i++) {
-            Quiz q = quizes.get(i);
+        for (int i = 0; i < quizzes.size(); i++) {
+            Quiz q = quizzes.get(i);
             sb.append(String.format("\t%d. %s\n", i + 1, q.getName()));
         }
         System.out.println(sb);
@@ -150,35 +167,52 @@ public class QuizManager {
 
     public void loadQuizes() {
         // load quizes from file
+        Path quizzesDirPath = Path.of(System.getProperty("user.dir")).resolve("quizzes");
+        try {
+            File quizDirFile = quizzesDirPath.toFile();
+
+            if (quizDirFile.exists()) {
+                File[] inputFiles = quizDirFile.listFiles();
+                if (inputFiles == null || inputFiles.length == 0) return;
+
+                for (File in : inputFiles) {
+                    FileInputStream fin = new FileInputStream(in);
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    quizzes.add((Quiz) oin.readObject());
+                    oin.close();
+                    fin.close();
+                }
+
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveQuizes() {
-        System.out.println(Path.of("./"));
-        // save created quizes from memory to file
-        // create directory for quizzes if it doesn't exist
-        // loop through quizzes and save them to their own files in the directory
-
-        //
+        Path quizzesDirPath = Path.of(System.getProperty("user.dir")).resolve("quizzes");
         try {
-            File quizDir = new File("./quizzes/");
-            if (quizDir.exists()) {
-                File[] f = quizDir.listFiles();
+            File quizDirFile = quizzesDirPath.toFile();
+            if (quizDirFile.exists()) {
+                // delete old save files
+                File[] f = quizDirFile.listFiles();
                 for (File file : f) {
+                    System.out.println("delete");
                     file.delete();
                 }
             } else {
-                quizDir.mkdirs();
+                quizDirFile.mkdirs();
             }
-            for (int i = 0; i < quizes.size(); i++) {
-                FileOutputStream fout = new FileOutputStream(quizDir.toPath().resolve(UUID.randomUUID() + ".quiz").toString());
+            for (Quiz quiz : quizzes) {
+                FileOutputStream fout = new FileOutputStream(quizzesDirPath.resolve(UUID.randomUUID() + ".quiz").toString());
                 ObjectOutputStream out = new ObjectOutputStream(fout);
-                out.writeObject(quizes.get(i));
+                out.writeObject(quiz);
+                out.close();
+                fout.close();
             }
 
-        } catch (FileNotFoundException | SecurityException e) {
+        } catch (SecurityException | IOException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }
