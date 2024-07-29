@@ -36,8 +36,7 @@ public class Question implements Serializable {
             if (!falseAnswersB[i] && shuffledAnswers[j] == null) {
                 shuffledAnswers[j] = choices[i];
                 falseAnswersB[i] = true;
-            }
-            else {
+            } else {
                 i--;
             }
         }
@@ -70,13 +69,14 @@ public class Question implements Serializable {
 
         int choice = Console.promptWithChoicesSpaced(content, choices);
 
-        if (choices[choice-1].equals(correctAnswer)) {
-            System.out.println("Good work! That was correct!");
-            return true;
-        } else {
-            System.out.println("Im sorry, that was not the correct answer.");
-            return false;
-        }
+        do {
+            if (!choices[choice - 1].equals(correctAnswer)) {
+                System.out.println("Im sorry, that was not the correct answer.");
+                choice = Console.promptWithChoicesSpaced(content, choices);
+            }
+        } while (!choices[choice - 1].equals(correctAnswer));
+        System.out.println("Good work! That was correct!");
+        return true;
     }
 
     public void setContent(String content) {

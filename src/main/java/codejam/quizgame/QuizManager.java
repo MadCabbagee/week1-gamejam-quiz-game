@@ -197,7 +197,6 @@ public class QuizManager {
                 // delete old save files
                 File[] f = quizDirFile.listFiles();
                 for (File file : f) {
-                    System.out.println("delete");
                     file.delete();
                 }
             } else {
